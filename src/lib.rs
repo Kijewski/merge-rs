@@ -299,3 +299,27 @@ pub mod hashmap {
         }
     }
 }
+
+/// Merge strategies for strings.
+///
+/// These strategies are only available if the `std` feature is enabled.
+#[cfg(feature = "std")]
+pub mod string {
+    /// Overwrite left with right if left is empty.
+    pub fn overwrite_empty(left: &mut String, right: String) {
+        if left.is_empty() {
+            *left = right;
+        }
+    }
+
+    /// Append the contents of right to left.
+    pub fn append(left: &mut String, mut right: String) {
+        left.push_str(&mut right);
+    }
+
+    /// Prepend the contents of right to left.
+    pub fn prepend(left: &mut String, mut right: String) {
+        right.push_str(left);
+        *left = right;
+    }
+}

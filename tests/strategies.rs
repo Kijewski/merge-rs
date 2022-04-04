@@ -214,3 +214,43 @@ mod hashmap {
         );
     }
 }
+
+#[cfg(feature = "std")]
+#[test]
+fn test_string_overwrite_empty() {
+    #[derive(Debug, Merge, PartialEq)]
+    struct S(#[merge(strategy = merge::string::overwrite_empty)] String);
+
+    test(S("".to_owned()), S("".to_owned()), S("".to_owned()));
+    test(S("1".to_owned()), S("".to_owned()), S("1".to_owned()));
+    test(S("0".to_owned()), S("0".to_owned()), S("1".to_owned()));
+    test(S("255".to_owned()), S("255".to_owned()), S("10".to_owned()));
+}
+
+#[cfg(feature = "std")]
+#[test]
+fn test_string_append() {
+    #[derive(Debug, Merge, PartialEq)]
+    struct S(#[merge(strategy = merge::string::append)] String);
+
+    test(S("".to_owned()), S("".to_owned()), S("".to_owned()));
+    test(S("1".to_owned()), S("".to_owned()), S("1".to_owned()));
+    test(S("01".to_owned()), S("0".to_owned()), S("1".to_owned()));
+    test(S("25510".to_owned()), S("255".to_owned()), S("10".to_owned()));
+    test(S("01234".to_owned()), S("012".to_owned()), S("34".to_owned()));
+    test(S("34012".to_owned()), S("34".to_owned()), S("012".to_owned()));
+}
+
+#[cfg(feature = "std")]
+#[test]
+fn test_string_prepend() {
+    #[derive(Debug, Merge, PartialEq)]
+    struct S(#[merge(strategy = merge::string::prepend)] String);
+
+    test(S("".to_owned()), S("".to_owned()), S("".to_owned()));
+    test(S("1".to_owned()), S("".to_owned()), S("1".to_owned()));
+    test(S("10".to_owned()), S("0".to_owned()), S("1".to_owned()));
+    test(S("10255".to_owned()), S("255".to_owned()), S("10".to_owned()));
+    test(S("34012".to_owned()), S("012".to_owned()), S("34".to_owned()));
+    test(S("01234".to_owned()), S("34".to_owned()), S("012".to_owned()));
+}
