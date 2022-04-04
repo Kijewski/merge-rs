@@ -564,3 +564,51 @@ fn test_default_strategy() {
         #[merge(strategy = Merge::merge)] N,
     );
 }
+
+#[test]
+fn test_generics() {
+    #[derive(Debug, Merge, PartialEq)]
+    #[merge(strategy = merge::option::overwrite_none)]
+    struct TupleWithGenerics<A: core::fmt::Display, B: core::fmt::Debug>(Option<A>, Option<B>);
+
+    #[derive(Debug, Merge, PartialEq)]
+    #[merge(strategy = merge::option::overwrite_none)]
+    struct TupleWithWhere<A, B>(Option<A>, Option<B>)
+    where
+        A: core::fmt::Display,
+        B: core::fmt::Debug;
+
+    #[derive(Debug, Merge, PartialEq)]
+    #[merge(strategy = merge::option::overwrite_none)]
+    struct TupleWithBoth<A: core::fmt::Display, B>(Option<A>, Option<B>)
+    where
+        B: core::fmt::Debug;
+
+    #[derive(Debug, Merge, PartialEq)]
+    #[merge(strategy = merge::option::overwrite_none)]
+    struct StructWithGenerics<A: core::fmt::Display, B: core::fmt::Debug> {
+        a: Option<A>,
+        b: Option<B>,
+    }
+
+    #[derive(Debug, Merge, PartialEq)]
+    #[merge(strategy = merge::option::overwrite_none)]
+    struct StructWithWhere<A, B>
+    where
+        A: core::fmt::Display,
+        B: core::fmt::Debug
+    {
+        a: Option<A>,
+        b: Option<B>,
+    }
+
+    #[derive(Debug, Merge, PartialEq)]
+    #[merge(strategy = merge::option::overwrite_none)]
+    struct StructWithBoth<A: core::fmt::Display, B>
+    where
+        B: core::fmt::Debug
+    {
+        a: Option<A>,
+        b: Option<B>,
+    }
+}
