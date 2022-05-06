@@ -243,9 +243,9 @@ pub mod ord {
 #[cfg(feature = "std")]
 pub mod vec {
     /// Overwrite left with right if left is empty.
-    pub fn overwrite_empty<T>(left: &mut Vec<T>, mut right: Vec<T>) {
+    pub fn overwrite_empty<T>(left: &mut Vec<T>, right: Vec<T>) {
         if left.is_empty() {
-            left.append(&mut right);
+            *left = right;
         }
     }
 
